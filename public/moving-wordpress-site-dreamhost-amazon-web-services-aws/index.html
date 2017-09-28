@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns#">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Moving my WordPress Site from Dreamhost to Amazon Web Services (AWS) &middot; Seth Gagnon</title>
+        <meta name="description" content="
+  
+    
+      The article will review some of the high level steps I took to move my WordPress site from being hosted on Dreamhost over to AWS.
+    
+  
+
+
+">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.27.1" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="Moving my WordPress Site from Dreamhost to Amazon Web Services (AWS)">
+<meta property="og:description" content="
+  
+    
+      The article will review some of the high level steps I took to move my WordPress site from being hosted on Dreamhost over to AWS.
+    
+  
+
+
+">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://sethgagnon.com/moving-wordpress-site-dreamhost-amazon-web-services-aws/">
+        <link rel="stylesheet" href="http://sethgagnon.com/dist/styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        
+    </head>
+    <body>
+        
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'XXX', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="DevOps &amp; Cloud" href="http://sethgagnon.com/">DevOps &amp; Cloud</a>
+                            </h1>
+                        
+                        <a class="button-square" href="http://sethgagnon.com/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                            <a class="button-square button-social hint--top" data-hint="Twitter" title="Twitter" href="https://twitter.com/XXX">
+                                <i class="fa fa-twitter"></i>
+                            </a>
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Gitlab" title="Gitlab" href="https://gitlab.com/XXX">
+                                <i class="fa fa-gitlab"></i>
+                            </a>
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Github" title="Github" href="https://github.com/XXX">
+                                <i class="fa fa-github-alt"></i>
+                            </a>
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Stack Overflow" title="Stack Overflow" href="https://stackoverflow.com/users/XXX/YYY">
+                                <i class="fa fa-stack-overflow"></i>
+                            </a>
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="LinkedIn" title="LinkedIn" href="https://linkedin.com/in/XXX/">
+                                <i class="fa fa-linkedin"></i>
+                            </a>
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Google+" title="Google+" href="https://google.com/&#43;XXX">
+                                <i class="fa fa-google-plus"></i>
+                            </a>
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Email" title="Email" href="mailto:XXX@example.com">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="Blog" href="/">Blog</a>
+    </li>
+
+    <li class="site-nav-item">
+        <a title="Projects" href="/project/">Projects</a>
+    </li>
+
+    <li class="site-nav-item">
+        <a title="Contact" href="/page/contact/">Contact</a>
+    </li>
+
+    <li class="site-nav-item">
+        <a title="About" href="/page/about/">About</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container" itemscope="" itemtype="http://schema.org/BlogPosting">
+        <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Moving my WordPress Site from Dreamhost to Amazon Web Services (AWS)</h1>
+    
+    <p class="post-date">
+        <span>Published <time datetime="2017-08-31" itemprop="datePublished">Thu, Aug 31, 2017</time></span>
+        <span>by</span>
+        <span itemscope="" itemprop="author" itemtype="https://schema.org/Person">
+            <span itemprop="name">
+                <a href="https://google.com/&#43;XXX" itemprop="url" rel="author">Seth Gagnon</a>
+            </span>
+        </span>
+    </p>
+</header>
+
+        <div class="post-content clearfix" itemprop="articleBody">
+    
+
+    <div class="clarify-article-content">
+  <div class="clarify-article-description">
+    <p>
+      The article will review some of the high level steps I took to move my WordPress site from being hosted on Dreamhost over to AWS.
+    </p>
+  </div>
+</div>
+
+<p></p>
+
+<div class="clarify-article-content">
+  <div class="clarify-steps-container">
+    <div id="clarify-step-1" class="clarify-step-container">
+      <h3 class="clarify-step-title">
+        1. Create a Hosted Zone in AWS that matches your domain name
+      </h3>
+      
+      <div class="clarify-sub-steps-container">
+        <div id="clarify-step-6" class="clarify-sub-step-container">
+          <h4 class="clarify-step-title">
+            1.1 In the AWS console, navigate to Services > Route53 > Hosted Zones
+          </h4>
+          
+          <div class="clarify-step-instructions">
+            <p style="padding-left: 30px;">
+              Here you can see I have a few hosted zones, but for this article, we will be focusing on sethgagnon.com
+            </p>
+          </div>
+          
+
+<pre><code>      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;/images/2017/08/in-the-aws-console-navigate-to-services-gt-route53-gt-hosted-zones.png?resize=813%2C261&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;clarify-step-7&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        1.2 Click Create Hosted Zone to create the new zone in AWS.
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-instructions&quot;&gt;
+        &lt;p style=&quot;padding-left: 30px;&quot;&gt;
+          You will want to enter in the exact domain name that you are using today. Keep the defaults for the rest and click Create.
+        &lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i1.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/click-create-hosted-zone-to-create-the-new-zone-in-aws-.png?resize=481%2C657&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;clarify-step-8&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        1.3 Confirm you now see your hosted zone in the list.
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-instructions&quot;&gt;
+        &lt;p style=&quot;padding-left: 30px;&quot;&gt;
+          At this point, you are now ready to move on to updating your DNS records on your existing domain provider.
+        &lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i0.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/confirm-you-now-see-your-hosted-zone-in-the-list.png?resize=814%2C262&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;clarify-clear&quot;&gt;
+&lt;/div&gt;
+
+&lt;div id=&quot;clarify-step-9&quot; class=&quot;clarify-step-container&quot;&gt;
+  &lt;h3 class=&quot;clarify-step-title&quot;&gt;
+    2. Create record sets in AWS on newly created Hosted Zone to match your existing DNS records.
+  &lt;/h3&gt;
+
+  &lt;div class=&quot;clarify-sub-steps-container&quot;&gt;
+    &lt;div id=&quot;clarify-step-10&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        2.1 Obtain your current DNS settings
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-instructions&quot;&gt;
+        &lt;p style=&quot;padding-left: 30px;&quot;&gt;
+          You will need to login to your existing domain provider and review the DNS settings that are currently in place for your name. Here is a copy of what I observed in Dreamhost.
+        &lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i0.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/obtain-youe-current-dns-settings.png?resize=814%2C868&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;clarify-step-11&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        2.2 Select your Hosted Zone
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-instructions&quot;&gt;
+        &lt;p style=&quot;padding-left: 30px;&quot;&gt;
+          You will now need to create these in AWS for the Hosted Zone you previously created. Click on the domain you created in the Hosted Zone list.
+        &lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i0.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/select-your-hosted-zone.png?resize=645%2C273&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;clarify-step-12&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        2.3 Then click on Create Record Set
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i0.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/then-click-on-create-record-set.png?resize=813%2C141&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;clarify-step-13&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        2.4 Create Records Sets
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-instructions&quot;&gt;
+        &lt;p style=&quot;padding-left: 30px;&quot;&gt;
+          Carefully go through the list you obtained from step 2.1 and ensure you create the EXACT same records in AWS. The only records you should omit for now are the Name Server (NS) records. Just leave those as is for now in AWS. You should have a list similar to the following (picture doesnt show all the records):
+        &lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i1.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/create-records-sets.png?resize=779%2C527&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;clarify-clear&quot;&gt;
+&lt;/div&gt;
+
+&lt;div id=&quot;clarify-step-2&quot; class=&quot;clarify-step-container&quot;&gt;
+  &lt;h3 class=&quot;clarify-step-title&quot;&gt;
+    3. Update your DNS records on your existing domain vendor (Dreamhost in my case)
+  &lt;/h3&gt;
+
+  &lt;div class=&quot;clarify-step-instructions&quot;&gt;
+    &lt;p style=&quot;padding-left: 30px;&quot;&gt;
+      You may now update your domain registration with your existing provider to point to AWS Name Servers.
+    &lt;/p&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;clarify-sub-steps-container&quot;&gt;
+    &lt;div id=&quot;clarify-step-14&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        3.1 Obtain the AWS name servers from your hosted zone you previously created.
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-instructions&quot;&gt;
+        &lt;p style=&quot;padding-left: 30px;&quot;&gt;
+          Search for the NS record type and obtain those values
+        &lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i2.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/obtain-the-aws-name-servers-from-your-hosted-zone-you-previously-created.png?resize=547%2C113&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;clarify-step-15&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        3.2 Update your existing DNS settings
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-instructions&quot;&gt;
+        &lt;p style=&quot;padding-left: 30px;&quot;&gt;
+          Login to your existing domain registration (Dreamhost for me) and point your name servers to the ones you obtained in step 3.1. Please note this could take up to 48 hours before your DNS settings are propagated. This all depends on your vendor. Please do not proceed to step 4 until you are sure that your DNS settings are using the AWS name servers.
+        &lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i0.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/update-your-existing-dns-settings.png?resize=687%2C255&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;clarify-clear&quot;&gt;
+&lt;/div&gt;
+
+&lt;div id=&quot;clarify-step-3&quot; class=&quot;clarify-step-container&quot;&gt;
+  &lt;h3 class=&quot;clarify-step-title&quot;&gt;
+    4. Transfer your domain so that AWS has the registration
+  &lt;/h3&gt;
+
+  &lt;div class=&quot;clarify-sub-steps-container&quot;&gt;
+    &lt;div id=&quot;clarify-step-16&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        4.1 Obtain the Authorization code from your existing domain provider
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-instructions&quot;&gt;
+        &lt;p style=&quot;padding-left: 30px;&quot;&gt;
+          You will need to enter an Authorization Code in AWS to initiate the domain transfer. I have masked some of this code out here.
+        &lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i0.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/obtain-the-authorization-code-from-your-existing-domain-provider.png?resize=583%2C377&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;clarify-step-17&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        4.2 Initiate Transfer to AWS
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-instructions&quot;&gt;
+        &lt;p style=&quot;padding-left: 30px;&quot;&gt;
+          Go to Route53 in AWS console and click on Registered domains in the left menu. Then click on Transfer Domain.
+        &lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i0.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/initiate-transfer-to-aws.png?resize=813%2C327&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;clarify-step-18&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        4.3 Enter in the domain name you wish to transfer and click Check.
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i1.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/enter-in-the-domain-name-you-wish-to-transfer-and-click-check.png?resize=813%2C467&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;clarify-step-19&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        4.4 Click Add to Cart and then click Continue
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i2.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/click-add-to-cart-and-then-click-continue.png?resize=813%2C365&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;clarify-step-20&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        4.5 Auth Code and name servers
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-instructions&quot;&gt;
+        &lt;p&gt;
+          Enter in your Auth code you obtained from step 4.1 and then select Import name servers from a Route53 hosted zone that has the same name as the domain. Ensure the hosted zone populates and it is correct. Then click Continue.
+        &lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i1.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/auth-code-and-name-servers.png?resize=813%2C405&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;clarify-step-21&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        4.6 Contact Details for 1 Domain
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-instructions&quot;&gt;
+        &lt;p&gt;
+          Enter in your contact details as the domain owner.
+        &lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i1.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/contact-details-for-1-domain.png?resize=813%2C457&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;clarify-step-22&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        4.7 Agree to terms and conditions and purchase
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i0.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/agree-to-terms-and-conditions-and-purchase.png?resize=813%2C265&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;clarify-step-23&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        4.8 Validatation email
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-instructions&quot;&gt;
+        &lt;p&gt;
+          You will receive an email asking you to approve the transfer and validate your email address. After you have done so, the transfer process will begin.
+        &lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i1.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/validatation-email.png?resize=813%2C305&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;clarify-clear&quot;&gt;
+&lt;/div&gt;
+
+&lt;div id=&quot;clarify-step-4&quot; class=&quot;clarify-step-container&quot;&gt;
+  &lt;h3 class=&quot;clarify-step-title&quot;&gt;
+    5. Export existing WordPress site so it can be moved over
+  &lt;/h3&gt;
+
+  &lt;div class=&quot;clarify-sub-steps-container&quot;&gt;
+    &lt;div id=&quot;clarify-step-24&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        5.1 Select your plugin to use for migration
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-instructions&quot;&gt;
+        &lt;p style=&quot;padding-left: 30px;&quot;&gt;
+          There are several good WordPress plugins available for migration of a site. I choose to use All-in-One WP Migration. If you don&amp;#8217;t have it, install the plugin and then do an Export site. You can select where you would like to export the site to. I choose a file for now. Save the file somewhere safe, as we will need to use it for import later.
+        &lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i2.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/select-your-plugin-to-use-for-migration.png?resize=813%2C525&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;clarify-clear&quot;&gt;
+&lt;/div&gt;
+
+&lt;div id=&quot;clarify-step-5&quot; class=&quot;clarify-step-container&quot;&gt;
+  &lt;h3 class=&quot;clarify-step-title&quot;&gt;
+    6. Create an EC2 instance that is running WordPress
+  &lt;/h3&gt;
+
+  &lt;div class=&quot;clarify-sub-steps-container&quot;&gt;
+    &lt;div id=&quot;clarify-step-25&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        6.1 Go back into the AWS console and navigate to EC2. Then click on Launch Instance
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i2.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/go-back-into-the-aws-console-and-navigate-to-ec2-then-click-on-launch-instance.png?resize=813%2C273&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;clarify-step-26&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        6.2 Choose your Amazon Machine Image (AMI)
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-instructions&quot;&gt;
+        &lt;p style=&quot;padding-left: 30px;&quot;&gt;
+          In the left menu, select AWS Marketplace and then search for WordPress. Select the first option in the list and click Select
+        &lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i2.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/choose-your-amazon-machine-image-ami-.png?resize=813%2C387&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;clarify-step-27&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        6.3 Click Continue after your review the pricing options (we will be using the AWS Free Tier option)
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i1.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/click-continue-after-your-review-the-pricing-options-we-will-be-using-the-aws-free-tier-option-.png?resize=813%2C385&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;clarify-step-28&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        6.4 Choose Instance Type
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-instructions&quot;&gt;
+        &lt;p style=&quot;padding-left: 30px;&quot;&gt;
+          Select the free tier eligible option here, unless you need to choose a different type for your needs. Click Next Configure Instance Details.
+        &lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i1.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/choose-instance-type.png?resize=813%2C379&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;clarify-step-29&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        6.5 Configure Instance Details
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-instructions&quot;&gt;
+        &lt;p style=&quot;padding-left: 30px;&quot;&gt;
+          You can keep the defaults here. I also enabled Cloudwatch for monitoring purposes, but you can always do that later if you so choose. Click Next: Add Storage
+        &lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i0.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/configure-instance-details.png?resize=813%2C389&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;clarify-step-30&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        6.6 Add Storage
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-instructions&quot;&gt;
+        &lt;p style=&quot;padding-left: 30px;&quot;&gt;
+          Enter the storage requirements you have. Pay attention to the free tier requirements. Click Next: Add Tags
+        &lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i1.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/add-storage.png?resize=813%2C375&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;clarify-step-31&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        6.7 Enter Tag (optional)
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-instructions&quot;&gt;
+        &lt;p style=&quot;padding-left: 30px;&quot;&gt;
+          I like to use tags so that I can groups resources and easily find usage patterns. Then click on Next: Configure Security Group
+        &lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i2.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/enter-tag-optional-.png?resize=813%2C385&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;clarify-step-32&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        6.8 Configure Security Group
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-instructions&quot;&gt;
+        &lt;p style=&quot;padding-left: 30px;&quot;&gt;
+          This is an important step. This tells AWS how you want to communicate and open up your new server instance. Here, I am creating a new security group and I entered in a meaningful name and then I changed the SSH type to only allow my IP address (masked out) to SSH into this server. This is recommended. I will want to keep HTTP and HTTPS open as this will be how users access my WordPress blog. Click Review and Launch.
+        &lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i1.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/configure-security-group.png?resize=813%2C387&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;clarify-step-33&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        6.9 Review final details and Launch instance.
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-instructions&quot;&gt;
+        &lt;p style=&quot;padding-left: 30px;&quot;&gt;
+          Click on Launch
+        &lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i1.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/review-final-details-and-launch-instance.png?resize=813%2C383&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;clarify-step-34&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        6.10 Select Key Pairs
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-instructions&quot;&gt;
+        &lt;p&gt;
+          This is the security key that will be used to access this server instance you are creating. You can either create a new key pair, or use an existing one. Select Launch Instances
+        &lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i1.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/select-key-pairs.png?resize=713%2C445&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;clarify-step-35&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        6.11 Launch Status
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-instructions&quot;&gt;
+        &lt;p style=&quot;padding-left: 30px;&quot;&gt;
+          The instances are launching. Select View Instances at the bottom of the screen.
+        &lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i2.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/launch-status.png?resize=813%2C169&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;clarify-step-36&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        6.12 Confirmation
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-instructions&quot;&gt;
+        &lt;p style=&quot;padding-left: 30px;&quot;&gt;
+          Ensure that your instance is launching and in running state.
+        &lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i1.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/confirmation.png?resize=813%2C187&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;clarify-step-37&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        6.13 Get the username and password to be able to login to your newly WordPress site.
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-instructions&quot;&gt;
+        &lt;p style=&quot;padding-left: 30px;&quot;&gt;
+          The usage instructions tab outlines what you need to do to find the password for the user account to login to the site and manage WordPress.
+        &lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i1.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/get-the-username-and-password-to-be-able-to-login-to-your-newly-wordpress-site.png?resize=813%2C423&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;clarify-clear&quot;&gt;
+&lt;/div&gt;
+
+&lt;div id=&quot;clarify-step-38&quot; class=&quot;clarify-step-container&quot;&gt;
+  &lt;h3 class=&quot;clarify-step-title&quot;&gt;
+    7. Import your WordPress site
+  &lt;/h3&gt;
+
+  &lt;div class=&quot;clarify-sub-steps-container&quot;&gt;
+    &lt;div id=&quot;clarify-step-39&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        7.1 Login to your newly created WordPress site.
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-instructions&quot;&gt;
+        &lt;p style=&quot;padding-left: 30px;&quot;&gt;
+          Look for the public DNS to use to access your WordPress instance. Use that in a browser and add /wp-admin to the end of the DNS. (Refer to those usage instructions from above on how to obtain the password for the default user account.)
+        &lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i1.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/login-to-your-newly-created-wordpress-site.png?resize=813%2C937&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;clarify-step-40&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        7.2 Install the All-in-One WP Migration plugin and activate it.
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i0.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/install-the-all-in-one-wp-migration-plugin-and-activate-it.png?resize=813%2C335&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;clarify-step-41&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        7.3 Go to All-in-One WP Migration &gt; Import
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-instructions&quot;&gt;
+        &lt;p style=&quot;padding-left: 30px;&quot;&gt;
+          I am importing from a file. I selected the file and then waited for the upload to complete.
+        &lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i1.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/go-to-all-in-one-wp-migration-gt-import.png?resize=813%2C425&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;clarify-step-42&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        7.4 Look for successful import and follow any instructions.
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i0.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/look-for-successful-import-and-follow-any-instructions.png?resize=813%2C461&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;clarify-clear&quot;&gt;
+&lt;/div&gt;
+
+&lt;div id=&quot;clarify-step-43&quot; class=&quot;clarify-step-container&quot;&gt;
+  &lt;h3 class=&quot;clarify-step-title&quot;&gt;
+    8. Create an Elastic IP for your new EC2 instance
+  &lt;/h3&gt;
+
+  &lt;div class=&quot;clarify-sub-steps-container&quot;&gt;
+    &lt;div id=&quot;clarify-step-44&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        8.1 Navigate to AWS console EC2 &gt; Elastic IPs and click on Allocate new address
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i0.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/navigate-to-aws-console-ec2-gt-elastic-ips-and-click-on-allocate-new-address.png?resize=813%2C353&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;clarify-step-45&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        8.2 Select allocate and then look for the new IP address
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i2.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/select-allocate-and-then-look-for-the-new-ip-address.png?resize=813%2C233&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;clarify-step-46&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        8.3 Select the Elastic IP address you just created
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i1.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/select-the-elastic-ip-address-you-just-created.png?resize=813%2C199&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;clarify-step-47&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        8.4 Then go to Actions &gt; Associate address
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i1.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/then-go-to-actions-gt-associate-address.png?resize=813%2C339&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;clarify-step-48&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        8.5 Enter in the appropriate info from the drop down menus then click Associate
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i2.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/enter-in-the-appropriate-info-from-the-drop-down-menus-then-click-associate.png?resize=813%2C335&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;clarify-clear&quot;&gt;
+&lt;/div&gt;
+
+&lt;div id=&quot;clarify-step-49&quot; class=&quot;clarify-step-container&quot;&gt;
+  &lt;h3 class=&quot;clarify-step-title&quot;&gt;
+    9. Update your hosted zone to point to the new Elastic IP address
+  &lt;/h3&gt;
+
+  &lt;div class=&quot;clarify-sub-steps-container&quot;&gt;
+    &lt;div id=&quot;clarify-step-50&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        9.1 In AWS console, navigate to Services &gt; Route53 &gt; Hosted Zone
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i0.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/in-aws-console-navigate-to-services-gt-route53-gt-hosted-zone.png?resize=813%2C209&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;clarify-step-51&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        9.2 Select the domain you wish to use to point to your newly created WordPress site and click on that domain name.
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i1.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/select-the-domain-you-wish-to-use-to-point-to-your-newly-created-wordpress-site-and-click-on-that-do.png?resize=813%2C541&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;clarify-step-52&quot; class=&quot;clarify-sub-step-container&quot;&gt;
+      &lt;h4 class=&quot;clarify-step-title&quot;&gt;
+        9.3 Click on Create Record Set and enter in the new Elastic IP Address as an A type record. Then click Create
+      &lt;/h4&gt;
+
+      &lt;div class=&quot;clarify-step-instructions&quot;&gt;
+        &lt;p&gt;
+          If you already have an existing A record pointing to your older IP address from when it was with your previous domain, just edit existing record so that it now contains this new elastic IP address.
+        &lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;clarify-step-image-wrapper&quot;&gt;
+        &lt;div class=&quot;clarify-step-image-container&quot;&gt;
+          &lt;img class=&quot;clarify-step-image&quot; src=&quot;https://i2.wp.com/www.sethgagnon.com/wp-content/uploads/2017/08/click-on-create-record-set-and-enter-in-the-new-elastic-ip-address-as-an-a-type-record-then-click-cr.png?resize=415%2C653&quot; alt=&quot;&quot; data-recalc-dims=&quot;1&quot; /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;clarify-clear&quot;&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;clarify-clear&quot;&gt;
+&lt;/div&gt;
+</code></pre>
+
+<p></div>
+</div></p>
+</div>
+
+        <footer class="post-footer clearfix">
+    
+
+    <div class="share">
+        
+            <a class="icon-twitter" href="https://twitter.com/share?text=Moving%20my%20WordPress%20Site%20from%20Dreamhost%20to%20Amazon%20Web%20Services%20%28AWS%29&url=http%3a%2f%2fsethgagnon.com%2fmoving-wordpress-site-dreamhost-amazon-web-services-aws%2f"
+                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fa fa-twitter"></i>
+                <span class="hidden">Twitter</span>
+            </a>
+        
+
+        
+            <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fsethgagnon.com%2fmoving-wordpress-site-dreamhost-amazon-web-services-aws%2f"
+                onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                <i class="fa fa-facebook"></i>
+                <span class="hidden">Facebook</span>
+            </a>
+        
+
+        
+            <a class="icon-google-plus" href="https://plus.google.com/share?url=http%3a%2f%2fsethgagnon.com%2fmoving-wordpress-site-dreamhost-amazon-web-services-aws%2f"
+              onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+              <i class="fa fa-google-plus"></i>
+                <span class="hidden">Google+</span>
+            </a>
+        
+        
+    </div>
+</footer>
+
+        
+    <div class="comments">
+        <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "XXX" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="DevOps &amp; Cloud" href="http://sethgagnon.com/">DevOps &amp; Cloud</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2017 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="http://sethgagnon.com/js/jquery-1.11.3.min.js"></script>
+        <script src="http://sethgagnon.com/js/jquery.fitvids.js"></script>
+        
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        
+        <script src="http://sethgagnon.com/js/scripts.js"></script>
+    </body>
+</html>
+

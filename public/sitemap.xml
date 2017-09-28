@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>http://sethgagnon.com/moving-wordpress-site-dreamhost-amazon-web-services-aws/</loc>
+    <lastmod>2017-08-31T12:45:02+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://sethgagnon.com/</loc>
+    <lastmod>2017-08-31T12:45:02+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://sethgagnon.com/posts/</loc>
+    <lastmod>2017-08-31T12:45:02+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://sethgagnon.com/tags/</loc>
+    <priority>0</priority>
+  </url>
+  
+</urlset>
